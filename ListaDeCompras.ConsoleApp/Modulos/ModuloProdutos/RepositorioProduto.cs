@@ -1,7 +1,8 @@
 using ListaDeCompras.ConsoleApp.Compartilhado;
 
-namespace ListaDeCompras.ConsoleApp.Modulos.ModuloCategoria;
+namespace ListaDeCompras.ConsoleApp.Modulos.ModuloProduto;
 
-public class RepositorioCategoria : RepositorioBase
+public class RepositorioProduto : RepositorioBase
 {
+    
 }

@@ -3,7 +3,7 @@ namespace ListaDeCompras.ConsoleApp.Utilidades;
 public static class GeradorIds
 {
     private static int contadorIdsCategoria = 1;
-    private static int contadorIdsRevista = 1;
+    private static int contadorIdsProduto = 1;
     private static int contadorIdsAmigo = 1;
     private static int contadorIdsEmprestimo = 1;
 
@@ -12,9 +12,9 @@ public static class GeradorIds
         return contadorIdsCategoria++;
     }
 
-    public static int ObterIdRevista()
+    public static int ObterIdProduto()
     {
-        return contadorIdsRevista++;
+        return contadorIdsProduto++;
     }
 
     public static int ObterIdAmigo()

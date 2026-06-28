@@ -97,4 +97,14 @@ public abstract class TelaBase
     public abstract void VisualizarTodos(bool deveExibirCabecalho);
 
     protected abstract EntidadeBase ObterDadosCadastrais();
+
+    protected virtual bool ExisteRegistroComInformacoesExclusivas(EntidadeBase entidade, int? idIgnorado = null)
+    {
+        return false;
+    }
+
+    protected virtual bool ExistemDependenciasAtivasDoRegistro(int idRegistro)
+    {
+        return false;
+    }
 }

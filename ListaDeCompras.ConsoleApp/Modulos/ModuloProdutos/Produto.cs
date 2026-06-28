@@ -1,54 +1,55 @@
 
+using System.Diagnostics.CodeAnalysis;
+using ListaDeCompras.ConsoleApp.Compartilhado;
 using ListaDeCompras.ConsoleApp.Modulos.ModuloCategoria;
+using ListaDeCompras.ConsoleApp.Utilidades;
+/*
+- Nome (2 a 100 caracteres)
 
-namespace ListaDeCompras.ConsoleApp.Modulos.Produto
+- Categoria (seleção obrigatória)
+- Unidade de medida (ex: kg, unidade, litro, caixa)
+- Preço aproximado
+*/
+namespace ListaDeCompras.ConsoleApp.Modulos.ModuloProduto
 {
-    public class Produto
+    public enum UnidadeMedidaProduto
     {
+        Unidade,
+        Caixa,
+        Duzia,
+        Kg,
+        L,
+        Ml,
+        G
+
+    }
+    public class Produto : EntidadeBase
+    {
+
         public string Nome { get; private set; }
-        public int NumeroEdicao { get; private set; }
-        public int AnoPublicacao { get; private set; }
-        public StatusRevista Status { get; private set; }
+
         public Categoria Categoria { get; private set; }
-        public bool EstaDisponivel
+        public int ValorUnidadeMedida { get; private set; }
+        public UnidadeMedidaProduto UnidadeMedida { get; private set; }
+        public decimal PrecoAproximado { get; private set; }
+
+        public Produto
+        (string nome, 
+        Categoria categoria, 
+        int valorUnidadeMedida, 
+        UnidadeMedidaProduto unidadeMedida, 
+        decimal     precoAproximado)
         {
-            get
-            {
-                return Status == StatusRevista.Disponivel;
-            }
+            Id = GeradorIds.ObterIdProduto();
+            this.Nome = nome;
+            this.Categoria = categoria;
+            this.UnidadeMedida = unidadeMedida;
+            this.ValorUnidadeMedida = valorUnidadeMedida;        
+            this.PrecoAproximado = precoAproximado;
         }
-
-        public Produto(string titulo, int numeroEdicao, int anoPublicacao, Caixa caixa)
-        {
-            Id = GeradorIds.ObterIdRevista();
-
-            Nome = titulo;
-            NumeroEdicao = numeroEdicao;
-            AnoPublicacao = anoPublicacao;
-            Categoria = caixa;
-
-            Status = StatusRevista.Disponivel;
-        }
-
-        public void Emprestar()
-        {
-            Status = StatusRevista.Emprestada;
-        }
-
-        public void Devolver()
-        {
-            Status = StatusRevista.Disponivel;
-        }
-
-        // substituição de método
         public override void Atualizar(EntidadeBase entidadeAtualizada)
         {
-            Revista revistaAtualizada = (Revista)entidadeAtualizada;
-
-            Nome = revistaAtualizada.Titulo;
-            NumeroEdicao = revistaAtualizada.NumeroEdicao;
-            AnoPublicacao = revistaAtualizada.AnoPublicacao;
-            Categoria = revistaAtualizada.Caixa;
+            throw new NotImplementedException();
         }
     }
 }
