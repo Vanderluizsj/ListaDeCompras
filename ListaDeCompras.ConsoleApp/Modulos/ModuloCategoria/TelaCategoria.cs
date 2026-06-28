@@ -1,14 +1,18 @@
 using ListaDeCompras.ConsoleApp.Compartilhado;
+using ListaDeCompras.ConsoleApp.Modulos.ModuloProduto;
 
 namespace ListaDeCompras.ConsoleApp.Modulos.ModuloCategoria;
 
 public class TelaCategoria : TelaBase, ITelaOpcoes
 {
     private readonly RepositorioCategoria repositorioCategoria;
+     private readonly RepositorioProduto repositorioProduto;
 
-    public TelaCategoria(RepositorioCategoria repositorioCategoria) : base("Categoria", repositorioCategoria)
+    public TelaCategoria(RepositorioCategoria repositorioCategoria,
+        RepositorioProduto repositorioProduto) : base("Categoria", repositorioCategoria)
     {
         this.repositorioCategoria = repositorioCategoria;
+        this.repositorioProduto = repositorioProduto;
     }
 
     public override void VisualizarTodos(bool deveExibirCabecalho)

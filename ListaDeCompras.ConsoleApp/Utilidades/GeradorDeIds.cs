@@ -4,8 +4,8 @@ public static class GeradorIds
 {
     private static int contadorIdsCategoria = 1;
     private static int contadorIdsProduto = 1;
-    private static int contadorIdsAmigo = 1;
-    private static int contadorIdsEmprestimo = 1;
+    private static int contadorIdsItemListaDeCompras = 1;
+    private static int contadorIdsListaDeCompras = 1;
 
     public static int ObterIdCategoria()
     {
@@ -17,13 +17,13 @@ public static class GeradorIds
         return contadorIdsProduto++;
     }
 
-    public static int ObterIdAmigo()
+    public static int ObterIdItemListaCompras()
     {
-        return contadorIdsAmigo++;
+        return contadorIdsItemListaDeCompras++;
     }
 
-    public static int ObterIdEmprestimo()
+    public static int ObterIdListaDeCompras()
     {
-        return contadorIdsEmprestimo++;
+        return contadorIdsListaDeCompras++;
     }
 }
