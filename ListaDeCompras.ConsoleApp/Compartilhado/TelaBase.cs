@@ -1,11 +1,11 @@
 namespace ListaDeCompras.ConsoleApp.Compartilhado;
 
-public abstract class TelaBase
+public abstract class TelaBase<TEntidade> : ITelaCrud where TEntidade : EntidadeBase
 {
-    private string nomeEntidade = string.Empty;
-    private RepositorioBase repositorio;
+    private readonly string nomeEntidade = string.Empty;
+    private readonly RepositorioBase<TEntidade> repositorio;
 
-    protected TelaBase(string nomeEntidade, RepositorioBase repositorio)
+    protected TelaBase(string nomeEntidade, RepositorioBase<TEntidade> repositorio)
     {
         this.nomeEntidade = nomeEntidade;
         this.repositorio = repositorio;
@@ -35,7 +35,14 @@ public abstract class TelaBase
         Console.WriteLine($"Cadastro de {nomeEntidade}");
         Console.WriteLine("---------------------------------");
 
-        EntidadeBase novaEntidade = ObterDadosCadastrais();
+       TEntidade novaEntidade = ObterDadosCadastrais();
+
+        if (ExisteRegistroComInformacoesExclusivas(novaEntidade))
+        {
+            Console.WriteLine("Digite ENTER para continuar");
+            Console.ReadLine();
+            return;
+        }
 
         repositorio.Cadastrar(novaEntidade);
 
@@ -61,7 +68,14 @@ public abstract class TelaBase
 
         Console.WriteLine("---------------------------------");
 
-        EntidadeBase entidadeAtualizada = ObterDadosCadastrais();
+        TEntidade entidadeAtualizada = ObterDadosCadastrais();
+
+        if (ExisteRegistroComInformacoesExclusivas(entidadeAtualizada, idSelecionado))
+        {
+            Console.WriteLine("Digite ENTER para continuar");
+            Console.ReadLine();
+            return;
+        }
 
         repositorio.Editar(idSelecionado, entidadeAtualizada);
 
@@ -85,6 +99,13 @@ public abstract class TelaBase
         Console.Write("Digite o ID do registro que deseja excluir: ");
         int idSelecionado = Convert.ToInt32(Console.ReadLine());
 
+        if (ExistemDependenciasAtivasDoRegistro(idSelecionado))
+        {
+            Console.WriteLine("Digite ENTER para continuar");
+            Console.ReadLine();
+            return;
+        }
+
         repositorio.Excluir(idSelecionado);
 
         Console.WriteLine("---------------------------------");
@@ -96,9 +117,9 @@ public abstract class TelaBase
 
     public abstract void VisualizarTodos(bool deveExibirCabecalho);
 
-    protected abstract EntidadeBase ObterDadosCadastrais();
+    protected abstract TEntidade ObterDadosCadastrais();
 
-    protected virtual bool ExisteRegistroComInformacoesExclusivas(EntidadeBase entidade, int? idIgnorado = null)
+    protected virtual bool ExisteRegistroComInformacoesExclusivas(TEntidade entidade, int? idIgnorado = null)
     {
         return false;
     }

@@ -3,12 +3,13 @@ using ListaDeCompras.ConsoleApp.Modulos.ModuloProduto;
 
 namespace ListaDeCompras.ConsoleApp.Modulos.ModuloCategoria;
 
-public class TelaCategoria : TelaBase, ITelaOpcoes
+public class TelaCategoria : TelaBase<Categoria>, ITelaOpcoes, ITelaCrud
 {
     private readonly RepositorioCategoria repositorioCategoria;
-     private readonly RepositorioProduto repositorioProduto;
+    private readonly RepositorioProduto repositorioProduto;
 
-    public TelaCategoria(RepositorioCategoria repositorioCategoria,
+    public TelaCategoria(
+        RepositorioCategoria repositorioCategoria,
         RepositorioProduto repositorioProduto) : base("Categoria", repositorioCategoria)
     {
         this.repositorioCategoria = repositorioCategoria;
@@ -29,15 +30,10 @@ public class TelaCategoria : TelaBase, ITelaOpcoes
             "Id", "Nome", "Cor"
         );
 
-        EntidadeBase[] registros = repositorioCategoria.SelecionarTodos();
+        List<Categoria> registros = repositorioCategoria.SelecionarTodos();
 
-        for (int i = 0; i < registros.Length; i++)
+        foreach (Categoria c in registros)
         {
-            Categoria c = (Categoria)registros[i];
-
-            if (c == null)
-                continue;
-
             Console.WriteLine(
                 "{0, -7} | {1, -20} | {2, -10}",
                 c.Id, c.Nome, c.Cor
@@ -52,7 +48,7 @@ public class TelaCategoria : TelaBase, ITelaOpcoes
         }
     }
 
-    protected override EntidadeBase ObterDadosCadastrais()
+    protected override Categoria ObterDadosCadastrais()
     {
         Console.Write("Informe o nome da categoria: ");
         string? nome = Console.ReadLine();
@@ -96,20 +92,13 @@ public class TelaCategoria : TelaBase, ITelaOpcoes
         return new Categoria(nome!, cor);
     }
 
-    protected override bool ExisteRegistroComInformacoesExclusivas(EntidadeBase entidade, int? idIgnorado = null)
+    protected override bool ExisteRegistroComInformacoesExclusivas(Categoria entidade, int? idIgnorado = null)
     {
-        Categoria novaCategoria = (Categoria)entidade;
+        List<Categoria> categorias = repositorioCategoria.SelecionarTodos();
 
-        EntidadeBase[] categorias = repositorioCategoria.SelecionarTodos();
-
-        for (int i = 0; i < categorias.Length; i++)
+        foreach (Categoria c in categorias)
         {
-            Categoria c = (Categoria)categorias[i];
-
-            if (c == null)
-                continue;
-
-            if (idIgnorado != c.Id && novaCategoria.Nome == c.Nome)
+            if (idIgnorado != c.Id && entidade.Nome == c.Nome)
             {
                 Console.WriteLine("---------------------------------");
                 Console.WriteLine($"Já existe uma categoria com o nome \"{c.Nome}\"!");
@@ -122,9 +111,22 @@ public class TelaCategoria : TelaBase, ITelaOpcoes
         return base.ExisteRegistroComInformacoesExclusivas(entidade);
     }
 
-    protected override bool ExistemDependenciasAtivasDoRegistro(int idRegistro)
+     protected override bool ExistemDependenciasAtivasDoRegistro(int idRegistro)
     {
-        // TODO - Não permitir excluir uma categoria caso tenha produtos vinculados
+        List<Produto> produtos = repositorioProduto.SelecionarTodos();
+
+        foreach (Produto p in produtos)
+        {
+            if (p.Categoria.Id == idRegistro)
+            {
+                Console.WriteLine("---------------------------------");
+                Console.WriteLine($"Existe(m) produto(s) relacionado(s) a essa categoria!");
+                Console.WriteLine("---------------------------------");
+
+                return true;
+            }
+        }
+
         return base.ExistemDependenciasAtivasDoRegistro(idRegistro);
     }
 }

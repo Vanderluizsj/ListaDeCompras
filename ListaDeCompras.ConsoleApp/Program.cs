@@ -1,4 +1,5 @@
 ﻿using ListaDeCompras.ConsoleApp.Compartilhado;
+using ListaDeCompras.ConsoleApp.Modulos.ModuloListaDeCompras;
 
 TelaPrincipal telaPrincipal = new TelaPrincipal();
 
@@ -16,7 +17,7 @@ while (true)
         if (opcaoMenuInterno == "S")
             break;
 
-        if (telaSelecionada is TelaBase telaBase)
+        if (telaSelecionada is ITelaCrud telaBase)
         {
             if (opcaoMenuInterno == "1")
                 telaBase.Cadastrar();
@@ -29,6 +30,17 @@ while (true)
 
             else if (opcaoMenuInterno == "4")
                 telaBase.VisualizarTodos(true);
+            if (telaBase is TelaListaCompras telaListaCompras)
+            {
+                if (opcaoMenuInterno == "5")
+                    telaListaCompras.AdicionarItem();
+
+                else if (opcaoMenuInterno == "6")
+                    telaListaCompras.RemoverItem();
+                else if (opcaoMenuInterno == "7")
+                    telaListaCompras.VisualizarItens(true);
+            }
+            
         }
     }
 }
